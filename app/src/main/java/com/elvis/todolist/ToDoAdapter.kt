@@ -1,6 +1,7 @@
 package com.elvis.todolist
 
-import android.content.Intent
+import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
+import android.icu.text.CaseMap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,11 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ToDoAdapter(private val  todos: MutableList<ToDo>) : RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder>() {
+class ToDoAdapter(
+    var tvToDoTitle: MutableList<Any>,
+    var cbDone: CheckBox,
+    private val todos: MutableList<ToDo>
+        ) : RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder>() {
     class ToDoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
@@ -19,38 +24,43 @@ class ToDoAdapter(private val  todos: MutableList<ToDo>) : RecyclerView.Adapter<
                 false
             )
         )
-    }
-
-    private fun toggleStrikeThrough(toDoTitle: TextView, isChecked: Boolean) {
 
     }
+    fun addToDo(todo: ToDo) {
+        todos.add(todo)
+        notifyItemInserted(todos.size -1)
+    }
+    fun deleteDoneToDos() {
+        todos.removeAll { toDo ->
+            toDo.isChecked
+        }
+        notifyDataSetChanged()
+    }
 
-      override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
+    private fun toggleStrikeThrough(tvToDoTitle: TextView, isChecked: Boolean) {
+        if (isChecked) {
+            tvToDoTitle.paintFlags = tvToDoTitle.paintFlags or STRIKE_THRU_TEXT_FLAG
+        } else {
+            tvToDoTitle.paintFlags = tvToDoTitle.paintFlags and STRIKE_THRU_TEXT_FLAG.inv()
+        }
+    }
+
+    override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         val currentToDo = todos[position]
         holder.itemView.apply {
-            ToDoTitle.text = currentToDo.title
-            checkBox.isChecked = currentToDo.isChecked
+            tvToDoTitle.text = currentToDo.title
+            cbDone.text = currentToDo.isChecked.toString()
+            toggleStrikeThrough(tvToDoTitle, currentToDo.isChecked)
+            cbDone.setOnCheckedChangeListener {_, isChecked ->
+                toggleStrikeThrough(tvToDoTitle, isChecked)
+                currentToDo.isChecked = !currentToDo.isChecked
+            }
         }
+
     }
 
     override fun getItemCount(): Int {
         return todos.size
 
     }
-/*
-    override fun onBindViewHolder(holder: ToDoAdapter.ToDoViewHolder, position: Int) {
-        val currentToDo = todos[position]
-        holder.ToDoTitle.text = currentToDo.title
-        holder.checkBox.text = currentToDo.isChecked
-        holder.itemView.setOnClickListener {
-            //Toast.makeText(holder.itemView.context, user.email, Toast.LENGTH_SHORT).show()
-            val intent = Intent(holder.itemView.context, DetailsActivity::class.java)
-            intent.putExtra("name", user.name)
-            intent.putExtra("email", user.email)
-            intent.putExtra("phone", user.phone)
-            intent.putExtra("address", user.address)
-            intent.putExtra("age", user.age)
-            context.startActivity(intent)
-        }
-    }*/
 }
