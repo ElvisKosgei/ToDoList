@@ -1,7 +1,6 @@
 package com.elvis.todolist
 
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
-import android.icu.text.CaseMap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ToDoAdapter(
-    var tvToDoTitle: MutableList<Any>,
-    var cbDone: CheckBox,
     private val todos: MutableList<ToDo>
         ) : RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder>() {
-    class ToDoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class ToDoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        val tvToDoTitle : TextView = itemView.findViewById(R.id.etToDoTitle)
+        val cbDone : CheckBox = itemView.findViewById(R.id.btnDeleteTODo)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
         return ToDoViewHolder(
@@ -47,7 +47,7 @@ class ToDoAdapter(
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         val currentToDo = todos[position]
-        holder.itemView.apply {
+    /*    holder.itemView.apply {
             tvToDoTitle.text = currentToDo.title
             cbDone.text = currentToDo.isChecked.toString()
             toggleStrikeThrough(tvToDoTitle, currentToDo.isChecked)
@@ -55,7 +55,7 @@ class ToDoAdapter(
                 toggleStrikeThrough(tvToDoTitle, isChecked)
                 currentToDo.isChecked = !currentToDo.isChecked
             }
-        }
+        }*/
 
     }
 

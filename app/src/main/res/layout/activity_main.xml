@@ -10,7 +10,7 @@
         android:id="@+id/rvToDoItems"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/toDoTitle"
+        app:layout_constraintBottom_toTopOf="@+id/etToDoTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,7 +20,7 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <EditText
-        android:id="@+id/toDoTitle"
+        android:id="@+id/etToDoTitle"
         android:layout_width="136dp"
         android:layout_height="52dp"
         android:ems="10"
